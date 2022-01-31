@@ -41,9 +41,6 @@ export default function Footer() {
           <ExternalLink href="https://github.com/gpanga">GitHub</ExternalLink>
         </div>
         <div className="flex flex-col space-y-4">
-          <Link href="/uses">
-            <a className="text-gray-500 hover:text-gray-600 transition">Uses</a>
-          </Link>
           <Link href="/snippets">
             <a className="text-gray-500 hover:text-gray-600 transition">
               Snippets

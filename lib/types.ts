@@ -49,8 +49,3 @@ export type GitHub = {
 export type Gumroad = {
   sales: number;
 };
-
-export type Unsplash = {
-  downloads: number;
-  views: number;
-};

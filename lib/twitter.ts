@@ -3,6 +3,10 @@ export const getTweets = async (ids) => {
     return [];
   }
 
+  if (!process.env.TWITTER_API_KEY) {
+    throw new Error('TWITTER_API_KEY is not set');
+  }
+
   const queryParams = new URLSearchParams({
     ids: ids.join(','),
     expansions:

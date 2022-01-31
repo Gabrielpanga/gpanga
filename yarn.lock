@@ -1817,11 +1817,6 @@
   "resolved" "https://registry.npmjs.org/flatted/-/flatted-3.2.2.tgz"
   "version" "3.2.2"
 
-"form-urlencoded@1.2.0":
-  "integrity" "sha1-Fs4sr6dtLki55ROrcjIorqWZM5Y="
-  "resolved" "https://registry.npmjs.org/form-urlencoded/-/form-urlencoded-1.2.0.tgz"
-  "version" "1.2.0"
-
 "format@^0.2.0":
   "integrity" "sha1-1hcBB+nv3E7TDJ3DkBbflCtctYs="
   "resolved" "https://registry.npmjs.org/format/-/format-0.2.2.tgz"
@@ -2644,11 +2639,6 @@
   "integrity" "sha1-wCUTUV4wna3dTCTGDP3c9ZdtkRU="
   "resolved" "https://registry.npmjs.org/lodash.castarray/-/lodash.castarray-4.4.0.tgz"
   "version" "4.4.0"
-
-"lodash.get@4.4.2":
-  "integrity" "sha1-LRd/ZS+jHpObRDjVNBSZ36OCXpk="
-  "resolved" "https://registry.npmjs.org/lodash.get/-/lodash.get-4.4.2.tgz"
-  "version" "4.4.2"
 
 "lodash.isplainobject@^4.0.6":
   "integrity" "sha1-fFJqUtibRcRcxpC4gWO+BJf1UMs="
@@ -3858,16 +3848,6 @@
   dependencies:
     "side-channel" "^1.0.4"
 
-"querystring@0.2.0":
-  "integrity" "sha1-sgmEkgO7Jd+CDadW50cAWHhSFiA="
-  "resolved" "https://registry.npmjs.org/querystring/-/querystring-0.2.0.tgz"
-  "version" "0.2.0"
-
-"querystringify@^2.0.0":
-  "integrity" "sha512-FIqgj2EUvTa7R50u0rGsyTftzjYmv/a3hO345bZNrqabNqjtgiDMgmo4mkUjd+nzU5oF3dClKqFIPUKybUyqoQ=="
-  "resolved" "https://registry.npmjs.org/querystringify/-/querystringify-2.2.0.tgz"
-  "version" "2.2.0"
-
 "queue-microtask@^1.2.2":
   "integrity" "sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A=="
   "resolved" "https://registry.npmjs.org/queue-microtask/-/queue-microtask-1.2.3.tgz"
@@ -4079,11 +4059,6 @@
   "integrity" "sha1-jGStX9MNqxyXbiNE/+f3kqam30I="
   "resolved" "https://registry.npmjs.org/require-directory/-/require-directory-2.1.1.tgz"
   "version" "2.1.1"
-
-"requires-port@^1.0.0":
-  "integrity" "sha1-kl0mAdOaxIXgkc8NpcbmlNw9yv8="
-  "resolved" "https://registry.npmjs.org/requires-port/-/requires-port-1.0.0.tgz"
-  "version" "1.0.0"
 
 "resolve-alpn@^1.0.0":
   "integrity" "sha512-0a1F4l73/ZFZOakJnQ3FvkJ2+gSTQWz/r2KE5OdDY0TxPm5h4GkqkWWfM47T7HsbnOtcJVEF4epCVy6u7Q3K+g=="
@@ -4621,30 +4596,12 @@
     "unist-util-is" "^5.0.0"
     "unist-util-visit-parents" "^5.0.0"
 
-"unsplash-js@6.3.0":
-  "integrity" "sha512-AmypERf7MIXYWBdoIYnofgB6DFoZgXhQST+K29T+S4ePVvzYqqrHxfiZosdqvb6Y15h6xCzEd/NqyG+99yk9xA=="
-  "resolved" "https://registry.npmjs.org/unsplash-js/-/unsplash-js-6.3.0.tgz"
-  "version" "6.3.0"
-  dependencies:
-    "form-urlencoded" "1.2.0"
-    "lodash.get" "4.4.2"
-    "querystring" "0.2.0"
-    "url-parse" "1.4.5"
-
 "uri-js@^4.2.2":
   "integrity" "sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg=="
   "resolved" "https://registry.npmjs.org/uri-js/-/uri-js-4.4.1.tgz"
   "version" "4.4.1"
   dependencies:
     "punycode" "^2.1.0"
-
-"url-parse@1.4.5":
-  "integrity" "sha512-4XDvC5vZRjEpjP0L4znrWeoH8P8F0XGBlfLdABi/6oV4o8xUVbTpyrxWHxkK2bT0pSIpcjdIzSoWUhlUfawCAQ=="
-  "resolved" "https://registry.npmjs.org/url-parse/-/url-parse-1.4.5.tgz"
-  "version" "1.4.5"
-  dependencies:
-    "querystringify" "^2.0.0"
-    "requires-port" "^1.0.0"
 
 "url-template@^2.0.8":
   "integrity" "sha1-/FZaPMy/93MMd19WQflVV5FDnyE="
