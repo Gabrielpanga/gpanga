@@ -24,9 +24,7 @@ export default function Blog({
           Blog
         </h1>
         <p className="mb-4 text-gray-600 dark:text-gray-400">
-          {`I've been writing online since 2014, mostly about web development and tech careers.
-            In total, I've written ${posts.length} articles on my blog.
-            Use the search below to filter by title.`}
+          TODO
         </p>
         <div className="relative w-full mb-4">
           <input
@@ -56,21 +54,7 @@ export default function Blog({
             <h3 className="mt-8 mb-4 text-2xl font-bold tracking-tight text-black md:text-4xl dark:text-white">
               Most Popular
             </h3>
-            <BlogPost
-              title="Rust Is The Future of JavaScript Infrastructure"
-              summary="Why is Rust being used to replace parts of the JavaScript web ecosystem like minification (Terser), transpilation (Babel), formatting (Prettier), bundling (webpack), linting (ESLint), and more?"
-              slug="rust"
-            />
-            <BlogPost
-              title="Everything I Know About Style Guides, Design Systems, and Component Libraries"
-              summary="A deep-dive on everything I've learned in the past year building style guides, design systems, component libraries, and their best practices."
-              slug="style-guides-component-libraries-design-systems"
-            />
-            <BlogPost
-              title="Creating a Monorepo with Lerna & Yarn Workspaces"
-              summary="In this guide, you will learn how to create a Monorepo to manage multiple packages with a shared build, test, and release process."
-              slug="monorepo-lerna-yarn-workspaces"
-            />
+            <span>TBD</span>
           </>
         )}
         <h3 className="mt-8 mb-4 text-2xl font-bold tracking-tight text-black md:text-4xl dark:text-white">
