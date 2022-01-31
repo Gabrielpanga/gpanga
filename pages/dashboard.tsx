@@ -5,14 +5,12 @@ import Newsletter from 'components/metrics/Newsletter';
 import Container from 'components/Container';
 import GitHub from 'components/metrics/Github';
 import Gumroad from 'components/metrics/Gumroad';
-import Unsplash from 'components/metrics/Unsplash';
-import YouTube from 'components/metrics/Youtube';
 import TopTracks from 'components/TopTracks';
 
 export default function Dashboard() {
   return (
     <Container
-      title="Dashboard – Lee Robinson"
+      title="Dashboard – Gabriel Pan Gantes"
       description="My personal dashboard, built with Next.js API routes deployed as serverless functions."
     >
       <div className="flex flex-col justify-center items-start max-w-2xl mx-auto mb-16">

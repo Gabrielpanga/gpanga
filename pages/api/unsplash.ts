@@ -7,13 +7,19 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  if (!process.env.UNSPLASH_ACCESS_KEY) {
+    return res.status(500).json({
+      error: 'UNSPLASH_ACCESS_KEY is not defined',
+    });
+  }
+
   if (!unsplash) {
     unsplash = new Unsplash({
       accessKey: process.env.UNSPLASH_ACCESS_KEY
     });
   }
 
-  const userStats = await unsplash.users.statistics('leerob');
+  const userStats = await unsplash.users.statistics('gpanga');
   const { downloads, views } = await toJson(userStats);
 
   res.setHeader(

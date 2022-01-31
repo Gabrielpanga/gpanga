@@ -4,6 +4,10 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  if (!process.env.REVUE_API_KEY) {
+    return res.status(200).json({ error: 'getrevue.co was not configured' });
+  }
+
   const { email } = req.body;
 
   if (!email) {
