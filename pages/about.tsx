@@ -1,6 +1,6 @@
-import Link from 'next/link';
+// import Link from 'next/link';
 
-import Timeline from '../components/Timeline';
+// import Timeline from '../components/Timeline';
 import Container from 'components/Container';
 
 export default function About() {
@@ -12,8 +12,8 @@ export default function About() {
         </h1>
         <div className="mb-8 prose leading-6 text-gray-600 dark:text-gray-400">
           <p>
-            Hey, I’m Gabriel Pan Gantes. I'm a developer, writer, and the creator of&nbsp;
-            <a
+            Hey, I’m Gabriel Pan Gantes.&nbsp;
+            {/* <a
               href="https://masteringnextjs.com"
               target="_blank"
               rel="noopener noreferrer"
@@ -28,24 +28,19 @@ export default function About() {
             >
               React 2025.
             </a>
-            &nbsp;I work at ▲Vercel as the Director of Developer Relations.
+            &nbsp;I work at ▲Vercel as the Director of Developer Relations. */}
           </p>
           <p>
-            I’ve spoken across the country at conferences and meet-ups about
+            I'm still building my website, so please check back soon.
+            {/* I’ve spoken across the country at conferences and meet-ups about
             front-end development, design, and recruiting. I write about
             development, tech careers, and my personal life on&nbsp;
             <Link href="/newsletter">
               <a>my newsletter.</a>
-            </Link>
-          </p>
-          <p>
-            I grew up in small-town Iowa and went to school at Iowa State,
-            graduating with a degree in Computer Engineering. I spend my free
-            time playing music, creating videos, and enjoying time with friends
-            and family in Des Moines, IA.
+            </Link> */}
           </p>
         </div>
-        <Timeline />
+        {/* <Timeline /> */}
       </div>
     </Container>
   );
