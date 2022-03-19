@@ -1,0 +1,40 @@
+---
+title: "GitHub Actions"
+description: "Action to deploy from Doppler Environment secrets"
+logo: "github-actions.png"
+---
+
+```yml
+- name: Install Doppler CLI
+uses: dopplerhq/cli-action@v1
+
+- name: Login in Doppler
+run: |
+    doppler setup --token=${{ secrets.DOPPLER_TOKEN_DEV }} --no-prompt
+    doppler secrets download --no-file --format=docker >> $GITHUB_ENV; 
+```
+
+## Intro
+
+If you are using [Doppler](https://doppler.com/) you can easily manage in a single place your environments and secrets.
+Not only for running your application but also from where developers will recover their environment configurations from a centralized source of truth.
+
+
+## Usage
+
+Even though doppler provide different environments there isn't an easy way to replicate that through GitHub to deploy the application into each stage (dev/prod).
+Doppler only configures this as _Repository Secrets_ and [there is no coverage](https://docs.doppler.com/docs/enclave-github-actions) for it right now.
+
+The easiest way is to configure an access token per environment and use it to deploy the application, recovering all the secrets while executing the action and making them available at the Action's env variable.
+
+Then you can easily use it to configure whatever you need in your application.
+
+```yml
+- name: Configure AWS credentials
+  uses: aws-actions/configure-aws-credentials@v1
+  with:
+    aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+    aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+```
+
+
