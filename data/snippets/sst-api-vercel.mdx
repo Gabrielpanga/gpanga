@@ -1,0 +1,63 @@
+---
+title: "Serverless Stack API + Vercel"
+description: "Deploy a SST Api connected to your Vercel domain"
+logo: "serverless-stack.jpeg"
+---
+
+```typescript
+/*
+  Certificate ARN: AWS's ARN to the generated domain certificate
+   ie: 'arn:aws:acm:us-east-1:1234567890:certificate/12345678-1234-1234-1234-123456789012'
+  Domain Name: The Url where it will listen
+*/
+const { CERTIFICATE_ARN, DOMAIN_NAME } = process.env;
+
+export default class MyAPIStack extends sst.Stack {
+  constructor(scope: sst.App, id: string, props?: sst.StackProps) {
+    super(scope, id, props);
+
+    // Create a HTTP API
+    const api = new sst.Api(this, "Api", {
+      routes: {
+        "GET /": "src/lambda.handler",
+      },
+      customDomain: {
+        isExternalDomain: true,
+        domainName: DOMAIN_NAME,
+        certificate: Certificate.fromCertificateArn(this, 
+          'Certificate', 
+          CERTIFICATE_ARN
+        ),
+      }
+    });
+
+    // Show the endpoint in the output
+    this.addOutputs({
+      "ApiEndpoint": api.url,
+      "ApiDomainUrl": api.apiGatewayDomain?.regionalDomainName || '',
+    });
+  }
+}
+```
+
+## Intro
+
+To create super simple Serverless API, Im using [Serverless Stack](https://serverless-stack.com/), which is built on top of AWS CDK Infrastructure as a Code solution.
+You can easily create an API with some lambda functions in a couple of minutes and start from a typescript bolilerplate
+
+```bash
+npx create-serverless-stack@latest aws-sst --language typescript
+```
+
+## Usage
+
+In the case you are not managing your domain in AWS Route53, you will need to create a custom domain and link it to vercel.
+
+<Step number={1} title="Create a certificate in AWS Certificate Manager" />
+You can validate all first level subdomains for your company (*.mycompany.com) using DNS checker to vercel by adding the TXT domain that AWS provides.
+
+<Step number={2} title="Deploy your new API" />
+Once deployed the snippets will output a Regional endpoint that's different from the API Gateway Endpoint. All Regional solutions will have a `d-` prefix.
+
+<Step number={3} title="Configure Vercel's Domain" />
+Using the Regional Endpoint, create a CNAME record on vercel domain manager pointing to this generated endpoint.
