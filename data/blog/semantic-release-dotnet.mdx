@@ -1,0 +1,159 @@
+---
+title: "Automating Releases of .NET SDKs using Semantic Release"
+publishedAt: "2020-03-19"
+summary: "Create a Pipeline to release DotNet SDKs using Semantic Release"
+image: "/static/images/semantic-release-dotnet/banner.png"
+---
+
+Releases are the key momentum of any project, they provide the details on what has been accomplished by the team, what was affected and how the developers should interact with this new fresh version. This involves notes, git tags & published artifacts. 
+How can we keep up the pace of **always shipping** startups?
+
+**What consists of a release?**
+
+When releasing we want to achieve 3 major actions:
+
+- Create a **git tag** with the version that was released, so it can be reviewed the exact state of the codebase for a specific version.
+- Create **release notes** for that release that describes what was fixed, added or updated in the code, so users can understand what advantages has of using that version.
+- **Publish** the package to its corresponding registry (*npm.js*, *github* or *nuget*) with the closed released version.
+
+At *Pluggy* we pursue two major values **consistency** & **automation,** so to accomplish automatic release we will relay in **Semantic Releases,** which's two big pillars are [Semantic Versioning](https://semver.org/) & [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/).
+
+I won’t go over too many details since the linked webpages have great explanations on what they are about, the *short* version would be:
+
+- **Conventional Commit:** Consistent way of creating commits, specifying the type of change that was made to understand the impact on the next release.
+- **Semantic Versioning**: Create numbered versions of releases that users can understand how big the change is on a consistent way.
+Cheatsheet: `BREAK.FEATURE.FIX`
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/f0907141-c922-41d7-bf98-e12be7ed1f2f/Untitled.png)
+
+Since we felt very confortable working with Typescript, we can relay on an awesome package called [semantic-release](https://www.npmjs.com/package/semantic-release), this way we can have a consistent way of releasing packages across our organization using the same release notes & flow.
+
+Using this package we will:
+
+✅ Calculate automatically the next version to be released.
+
+✅ Create a git tag for the release
+
+✅ Create a GitHub Release with it’s corresponding notes based on Conventional Commits linking to the released commits.
+
+✅ Update affected Pull Requests with a comment specifying the release that has been made.
+
+✅ Commit version changes on project files.
+
+When working on *Typescript* projects we can simply import *semantic-release* as dev dependencies and run `npm / npx / yarn` commands from our CI/CD pipeline. But in the case of DotNet we don’t want to mix up `package.json` files with DotNet project files. To avoid this we are using an awesome pre-existing Github action, [cycjimmy/semantic-release-action](https://github.com/cycjimmy/semantic-release-action).
+
+To automate this process we used GitHub Actions pipeline, that provides the closest pipeline we could have to our codebase and it’s super easy to setup.
+
+The following is an example of a GitHub yaml configuration file that can be configured at the root level `.github/workflows` folder.
+
+```yaml
+name: Release
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+env:
+  PROJECT_PATH: 'Gpanga.Example.SDK/Gpanga.Example.SDK.csproj'
+  PACKAGE_OUTPUT_DIRECTORY: ${{ github.workspace }}/output
+  NUGET_PUSH_URL: ${{ secrets.NUGET_PUSH_URL }}
+  NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: 3.1.x
+      - name: Semantic Release
+        id: release
+        uses: cycjimmy/semantic-release-action@v3
+        with:
+          working_directory: ./Gpanga.Example.SDK
+          extra_plugins: |
+            @semantic-release/commit-analyzer
+            @semantic-release/release-notes-generator
+            @semantic-release/github
+            @semantic-release/git
+            @semantic-release/exec
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: 'Pack & Publish project'
+        if: ${{ steps.release.outputs.new_release_version }}
+        run: |
+          dotnet clean
+          dotnet pack ${{ env.PROJECT_PATH }} --configuration Release --include-symbols --output ${{ env.PACKAGE_OUTPUT_DIRECTORY }}
+          dotnet nuget push ${{ env.PACKAGE_OUTPUT_DIRECTORY }}/*.nupkg -k ${{ secrets.NUGET_TOKEN }} -s ${{ env.NUGET_PUSH_URL }}
+```
+
+Let’s review step by step, of the “Release” action.
+
+1. We setup the workflow to run manually or on each push to the `main` branch.
+2. We setup environment variables, and some of those are recovered from [GitHub Secrets](https://docs.github.com/en/actions/security-guides/encrypted-secrets). 
+3. When running the job, it will execute some steps in sequence.
+    1. Checkout: Clones the repository in the GitHub container that it’s running the pipeline.
+    2. Setup: Configures `dot-net` framework on the container.
+    3. Run Semantic Release: As mentioned before we use [cycjimmy/semantic-release-action](https://github.com/cycjimmy/semantic-release-action)  that provides a wrapper to this NPM package and an easy way to configure all necessary plugins.
+    4. Pack & Publish: In our last step we validate that if there was a new release made in the previous step, we pack & publish our project to the **Nuget** Registry.
+    
+
+> Even though there are some `semantic-release` plugins related to *nuget* they didn’t provide the complete set of rules that were needed to run this example, and since there were just a few lines, I would recommend creating a multi-line step to have full control of the publish action.
+> 
+
+### What’s the difference with other releases?
+
+Apart from providing a quick setup for **Semantic Release** powered by **Conventional Commits**, I wanted to focus this solution on an SDK that’s communicating with a SaaS API.
+When maintaining multiple SDKs languages & versions we need to understand the distribution of our users that are connecting to our API, and provide more tools to our support engineers when troubleshooting.
+
+To resolve this we can easily add a `User-Agent` header to our requests so every interaction of our SDK contains a trace of which SDK was used to make the request and which was the specific version used.
+
+```csharp
+var version = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+WebRequest request = WebRequest.Create(url);
+request.Headers.Add("User-Agent", string.Format("Gpanga.SDK/{0}", version));
+```
+
+The main pain point here is maintaining the version of the package in sync with our `semantic-release` pipeline, and updated on every release. To do the trick, I have created a small script that it’s executed after a new version it’s released, and it receives the version & the project filename. 
+
+```json
+[
+    "@semantic-release/exec",
+    {
+        "prepareCmd": "../updateVersion.sh '${nextRelease.version}' 'Gpanga.Example.SDK.csproj'"
+    }
+]
+```
+
+```bash
+#!/bin/bash
+
+echo "::set-output name=new_release_version::$1"
+sed -i "s#<PackageVersion>.*#<PackageVersion>$1</PackageVersion>#" $2
+sed -i "s#<Version>.*#<Version>$1</Version>#" $2
+```
+
+This way we can keep our project version in sync and commit this change as part of our release on every run.
+
+```json
+[
+    "@semantic-release/git",
+    {
+        "assets": [
+            "Gpanga.Example.SDK.csproj"
+        ],
+        "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+    }
+]
+```
+
+At the end we just want to achieve one major goal, that it’s to remove developers manual work that is sensible of human mistakes. We should always pursue automation as much as it can and GitHub actions are a great way to relay automations.
+
+![Kill them all](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/cf18bb17-dc67-45e3-a1b7-edb8e576e8e5/Untitled.png)
+
+You can find the complete example of this project at https://github.com/Gabrielpanga/dotnet-nuget-example.
