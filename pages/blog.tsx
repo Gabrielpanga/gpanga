@@ -24,7 +24,7 @@ export default function Blog({
           Blog
         </h1>
         <p className="mb-4 text-gray-600 dark:text-gray-400">
-          TODO
+          I've been working on startups over the last 10 years, developing software in multiple technologies and architectures. I'm sharing my experiences and thoughts to help the community to learn and grow
         </p>
         <div className="relative w-full mb-4">
           <input
