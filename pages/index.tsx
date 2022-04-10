@@ -62,7 +62,7 @@ export default function Home({ videos }) {
             gradient="from-[#FDE68A] via-[#FCA5A5] to-[#FECACA]"
           />
         </div>
-        {/* <Link href="/blog">
+        <Link href="/blog">
           <a className="flex mt-8 text-gray-600 dark:text-gray-400 leading-7 rounded-lg hover:text-gray-800 dark:hover:text-gray-200 transition-all h-6">
             Read all posts
             <svg
@@ -80,7 +80,7 @@ export default function Home({ videos }) {
               />
             </svg>
           </a>
-        </Link> */}
+        </Link>
         <Subscribe />
       </div>
     </Container>
