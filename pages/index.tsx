@@ -46,19 +46,19 @@ export default function Home({ videos }) {
         <div className="flex gap-6 flex-col md:flex-row">
           <BlogPostCard
             title="Automating Releases of .NET SDKs using Semantic Release"
-            slug="style-guides-component-libraries-design-systems"
+            slug="semantic-release-dotnet"
             gradient="from-[#D8B4FE] to-[#818CF8]"
           />
           <BlogPostCard
             title="Beautiful Kafka implementation on Serverless Stack"
-            slug="rust"
-            releaseDate='2022-03-21'
+            slug=""
+            releaseDate='2022-04-15'
             gradient="from-[#6EE7B7] via-[#3B82F6] to-[#9333EA]"
           />
           <BlogPostCard
             title="Fire your releases from Slack"
-            releaseDate='2022-04-04'
-            slug="react-state-management"
+            releaseDate='2022-04-25'
+            slug=""
             gradient="from-[#FDE68A] via-[#FCA5A5] to-[#FECACA]"
           />
         </div>
