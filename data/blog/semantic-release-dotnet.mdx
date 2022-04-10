@@ -24,21 +24,26 @@ I won’t go over too many details since the linked webpages have great explanat
 - **Semantic Versioning**: Create numbered versions of releases that users can understand how big the change is on a consistent way.
 Cheatsheet: `BREAK.FEATURE.FIX`
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/f0907141-c922-41d7-bf98-e12be7ed1f2f/Untitled.png)
+<Image
+  alt={`Release Version in GitHub`}
+  src={`/static/images/semantic-release-dotnet/release-version.png`}
+  width={1588 / 3}
+  height={1264 / 3}
+/>
 
 Since we felt very confortable working with Typescript, we can relay on an awesome package called [semantic-release](https://www.npmjs.com/package/semantic-release), this way we can have a consistent way of releasing packages across our organization using the same release notes & flow.
 
 Using this package we will:
 
-✅ Calculate automatically the next version to be released.
+✅  Calculate automatically the next version to be released.
 
-✅ Create a git tag for the release
+✅  Create a git tag for the release
 
-✅ Create a GitHub Release with it’s corresponding notes based on Conventional Commits linking to the released commits.
+✅  Create a GitHub Release with it’s corresponding notes based on Conventional Commits linking to the released commits.
 
-✅ Update affected Pull Requests with a comment specifying the release that has been made.
+✅  Update affected Pull Requests with a comment specifying the release that has been made.
 
-✅ Commit version changes on project files.
+✅  Commit version changes on project files.
 
 When working on *Typescript* projects we can simply import *semantic-release* as dev dependencies and run `npm / npx / yarn` commands from our CI/CD pipeline. But in the case of DotNet we don’t want to mix up `package.json` files with DotNet project files. To avoid this we are using an awesome pre-existing Github action, [cycjimmy/semantic-release-action](https://github.com/cycjimmy/semantic-release-action).
 
@@ -154,6 +159,11 @@ This way we can keep our project version in sync and commit this change as part 
 
 At the end we just want to achieve one major goal, that it’s to remove developers manual work that is sensible of human mistakes. We should always pursue automation as much as it can and GitHub actions are a great way to relay automations.
 
-![Kill them all](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/cf18bb17-dc67-45e3-a1b7-edb8e576e8e5/Untitled.png)
+<Image
+  alt={`Kill humans, automate everything`}
+  src={`/static/images/semantic-release-dotnet/kill-humans.png`}
+  width={1588 / 3}
+  height={1264 / 3}
+/>
 
-You can find the complete example of this project at https://github.com/Gabrielpanga/dotnet-nuget-example.
+You can find the complete example of this project at [Gabrielpanga/dotnet-nuget-example](https://github.com/Gabrielpanga/dotnet-nuget-example).
