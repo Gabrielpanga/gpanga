@@ -5,13 +5,12 @@ logo: "github-actions.png"
 ---
 
 ```yml
-- name: Install Doppler CLI
-uses: dopplerhq/cli-action@v1
-
+- uses: dopplerhq/cli-action@v1
 - name: Login in Doppler
-run: |
-    doppler setup --token=${{ secrets.DOPPLER_TOKEN_DEV }} --no-prompt
-    doppler secrets download --no-file --format=docker >> $GITHUB_ENV; 
+  run: |
+    doppler secrets download --no-file --format=docker >> $GITHUB_ENV;
+  env:
+    DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN_DEV }}
 ```
 
 ## Intro
