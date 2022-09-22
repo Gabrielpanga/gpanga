@@ -36,7 +36,7 @@ export default function Footer() {
           <ExternalLink href="https://twitter.com/gpangantes">
             Twitter
           </ExternalLink>
-          <ExternalLink href="https://github.com/gpanga">GitHub</ExternalLink>
+          <ExternalLink href="https://github.com/gabrielpanga">GitHub</ExternalLink>
         </div>
         <div className="flex flex-col space-y-4">
           <Link href="/snippets">
