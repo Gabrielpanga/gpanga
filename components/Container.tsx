@@ -39,7 +39,7 @@ export default function Container(props) {
   const router = useRouter();
   const meta = {
     title: 'Gabriel Pan Gantes – Tech-Enterpreneur, full-stack engineer & writer apprentice',
-    description: `Front-end developer, JavaScript enthusiast, and course creator.`,
+    description: `Full-stack engineer, tech-entepreneur, angel investor & writer apprentice`,
     image: 'https://gpanga.com/static/images/banner.png',
     type: 'website',
     ...customMeta

@@ -1,0 +1,24 @@
+---
+title: "Vercel's Server-Side Analytics"
+description: "Track server-side analytics with Vercel + Upstash + Tinybird"
+logo: "tinybird.jpeg"
+---
+
+Checkout the [repository](https://github.com/Gabrielpanga/vercelapi2tinybird) for specifications on how to run it.
+
+## Intro
+
+The goal of this project is to track API requests into Tinybird data pipeline, providing an easy way for your users to understand their activity/logs from your API.
+
+## Usage
+
+To setup this project on your vercel application you can easily configure it following the readme file where you will:
+
+<Step number={1} title="Configure Upstash Kafka" />
+Setup a *Upstash* account to configure a Kafka topic to listen to all events your api will trigger.
+
+<Step number={2} title="Configure Tinybird's Datasource" />
+Configure Tinybird's data ingestion to collect the events received through kafka and store it on a data source to be exposed by APIs.
+
+<Step number={3} title="Configure Nextjs's Middleware" />
+Using Next.JS middleware you can track server side api calls, tracking user's footprint and requests performances, sending the events to upstash.
