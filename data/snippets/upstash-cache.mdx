@@ -1,0 +1,25 @@
+---
+title: "Cache auth0 access tokens"
+description: "Using Upstash Redis cache tokens generated for Auth0 M2M"
+logo: "upstash.jpeg"
+---
+
+Checkout the [repository](https://github.com/Gabrielpanga/vercel-upstash-tokens-cache) for specifications on how to run it.
+
+## Intro
+
+When communicating with microservices with Auth0 you will be required to generate tokens to communicate between services.
+Even though Auth0 allows for tokens to expire based on the configurations you need (1day - 30 days) 
+on serverless architecture you will end up generating one per request due to stateless design.
+
+The goal is an easy way to manage tokens on Upstash redis services between vercel api & other api authenticated with auth0.
+
+## Usage
+
+To setup this project on your vercel application you can easily configure it following the readme file where you will:
+
+<Step number={1} title="Configure Upstash Redis" />
+Setup a *Upstash* account to configure Redis to store the Access Tokens generated from auth0.
+
+<Step number={2} title="Configure Auth0" />
+Configure a free *Auth0* account to authenticate & authroize api request
