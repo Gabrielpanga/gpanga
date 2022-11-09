@@ -5,7 +5,6 @@ import Newsletter from 'components/metrics/Newsletter';
 import Container from 'components/Container';
 import GitHub from 'components/metrics/Github';
 import Gumroad from 'components/metrics/Gumroad';
-import TopTracks from 'components/TopTracks';
 
 export default function Dashboard() {
   return (
@@ -47,7 +46,6 @@ export default function Dashboard() {
           Curious what I'm currently jamming to? Here's my top tracks on Spotify
           updated daily.
         </p>
-        <TopTracks />
       </div>
     </Container>
   );
