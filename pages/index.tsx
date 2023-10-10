@@ -52,8 +52,13 @@ export default function Home({ videos }) {
           <BlogPostCard
             title="How to create your company's second mind using supabase's pgvector?"
             slug="supabase-openai-second-brain"
-            releaseDate='2023-10-10'
             gradient="from-[#6EE7B7] via-[#3B82F6] to-[#9333EA]"
+          />
+          <BlogPostCard
+            title="The Startup Engineer"
+            slug="startup-engineer"
+            releaseDate="2023-10-24"
+            gradient="from-[#FDE68A] via-[#FCA5A5] to-[#FECACA]"
           />
         </div>
         <Link href="/blog">
