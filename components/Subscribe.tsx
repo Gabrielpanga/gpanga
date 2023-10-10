@@ -72,7 +72,7 @@ export default function Subscribe() {
         <SuccessMessage>{form.message}</SuccessMessage>
       ) : (
         <p className="text-sm text-gray-800 dark:text-gray-200">
-          Planning to create a newsletter for 2023, you're on the list!
+          Planning to create a newsletter for 2024, you're on the list!
         </p>
       )}
     </div>

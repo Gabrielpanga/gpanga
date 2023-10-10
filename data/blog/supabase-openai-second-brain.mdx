@@ -103,30 +103,24 @@ async load() {
 		/**
 			Incident json example
 			{
-        "name": "Nubank connection it's currently in maintainance",
-        "status": "Investigating",
+        		"name": "Nubank connection it's currently in maintainance",
+        		"status": "Investigating",
 				"components": [{ "name": "Nubank Retail" }],
-        "updates": [
-          { 
-						"created_at": "2023-09-01T12:00:00.000Z", 
-						"body": "The team its investigating the issue with the connector of nubank" 
-					}
-				]
+        		"updates": [{ 
+					"created_at": "2023-09-01T12:00:00.000Z", 
+					"body": "The team its investigating the issue with the connector of nubank" 
+				}]
 			}
 		*/
 		const { name, components, incident_updates, status } = this.incident
-    const contents = `
-        # ${name}
+    const contents = `# ${name}
         There is an incident affecting ${components.length} components.
         Which are:
         ${components.map((component) => `- ${component.name}`).join('\n')}
         The status is ${status}.
         ${incident_updates
           .map(
-            (update) => `
-          - ${update.created_at}
-          ${update.body}
-        `
+            (update) => ` - ${update.created_at} ${update.body}`
           )
           .join('\n')}
       `
@@ -142,6 +136,8 @@ The documents are processed on pages, with checksums to avoid refreshing the dat
 <Image
   alt={"Import result"}
   src={`/static/images/supabase-openai-second-brain/table.png`}
+  width={1588 / 3}
+  height={1264 / 3}
 />
 
 This can already be used through the built-in interface, to get responses for team's questions, 
@@ -149,6 +145,8 @@ This can already be used through the built-in interface, to get responses for te
 <Image
   alt={"Reviewing template"}
   src={`/static/images/supabase-openai-second-brain/web.png`}
+  width={1588 / 3}
+  height={1264 / 3}
 />
 
 Since this project provides an endpoint for vector searches it can easily be connected to incoming Slack messages from team members or your users. 
@@ -160,6 +158,8 @@ As an example, I connected this chatbot (a wise owl called “*Morai*”), that 
 <Image
   alt={"Chatting with the bot"}
   src={`/static/images/supabase-openai-second-brain/chat.png`}
+  width={1588 / 3}
+  height={1264 / 3}
 />
 
 ### Closing thoughts
