@@ -1,0 +1,171 @@
+---
+title: "How to create your company's second mind using supabase's pgvector?"
+publishedAt: "2023-10-10"
+summary: "Create a Pipeline to release DotNet SDKs using Semantic Release"
+image: "/static/images/semantic-release-dotnet/banner.png"
+---
+
+Every company while attending their customers with problems and doubts, it requires to have **all the knowledge spread across their support & customer success teams**. Even if the information is available on **multiple resources**, users are not always able to access or get answers for simple questions.
+
+Customers require an **expert response for their inquiries that can involve any topic** of the company's product, pulling knowledge from all the tools that the team uses everyday, giving enough context power generative AI tools.
+
+## **Introduction**
+
+Using Supabase, an open-source alternative for Firebase providing Postgres database with vector storage, authentication and Rest API. It's a great alternative not only for Firebase, but for kicking up projects that uses Postgres databases and want to skip the backend setup without having to worry about infrastructure. Learn more about them in their [documentation](https://supabase.com/docs).
+
+They already provide a huge amount of starters, solutions and documentation, to kick off any project related to building apps for search, clustering, recommendations, anomaly detection, or any generative AI solutions empowered by their [Supabase Vector](https://supabase.com/vector), and supports integrations like [Hugging Face](https://supabase.com/blog/hugging-face-supabase).
+
+## Solution
+
+Creating a teams second brain represents a big effort, data is scattered across multiple platforms like Linear, Notion, slack, Statuspage, Readme.com, blogs, etc, and requires active maintenance. The idea of this project was to create a second brain that automatically pulls information from your team's sources, using **Supabase's Vector** store embeddings for internal and external future searches. Creating company-specific responses that can solve any doubt through a chat interface or directly from the team's communication tools like slack/discord.
+
+### Getting Started
+
+Starting from this [template](https://github.com/Gabrielpanga/nextjs-openai-doc-search), forked from the original by the Supabase team, I launched a search for markdown documents in a few seconds.
+
+This project is already connected to Open AI for two reasons.
+
+1. **Build Time**: When building will generate embeddings using OpenAI API, and store those embedding on *supabase vector*, for future searches.
+2. **Query Time**: When a new query request is triggered, it will look up content by similarity on your vector storage and give enough context to OpenAI `gpt-3.5-turbo` model to generate a response of that search.
+
+So *supabase* already provided a chatbot for all your markdown files, it will just require you to sync it with this project and that would be all! 
+
+The only problem with this solution is that requires **active maintenance and another source of documentation that can be outdated**. We want to connect all the team knowledge tools and automatically sync it to this second brain. Also, we want to make it available for all team members and outsiders, to chat with it directly from the tools we use daily.
+
+### **Pulling information from all sources**
+
+Not all teams store their documentation in *github* markdown files, but in fact they could easily be exported as such.
+
+Connecting to a source is just as easy as extending the `BaseEmbeddingSource` class that will explain the type of document that its being generated, and how to `load` and to `recover` all those documents contents as well.
+
+```jsx
+export abstract class BaseEmbeddingSource {
+  checksum?: string
+  meta?: Meta
+  sections?: Section[]
+  type?: string
+
+  constructor(public source: string, public path: string, public parentPath?: string) {}
+
+  abstract load(): Promise<{
+    checksum: string
+    meta?: Meta
+    sections: Section[]
+  }>
+
+  abstract getAll(): Promise<BaseEmbeddingSource[]>
+}
+```
+
+In this case, connecting to [Readme.com](http://Readme.com) allowed my team at [Pluggy](https://www.pluggy.ai) to access the information of our API Documentation, API Definitions, Changelog and all our Guides that help our customers understand how to use and consume our Data API. Mapping each type of document from Readme's API to markdown files ready for import.
+
+```jsx
+static async getAll(): Promise<ReadmeComEmbeddingSource[]> {
+	const readmeComApi = new ReadmeComApi()
+	const [changelogs, parentPages] = await Promise.all([
+	  readmeComApi.getChangelogs(),
+	  readmeComApi.getAllPages(),
+	])
+	return [
+	  ...changelogs.map(
+	    (changelog) =>
+	      new ReadmeComEmbeddingSource(
+	        'readme.com',
+	        changelog.body,
+	        `changelog/${changelog.slug}`,
+	        'changelog'
+	      )
+	  ),
+	  ...parentPages
+	    .map((parentPage) => {
+	      return parentPage.docs
+	        .filter((doc) => !!doc.body)
+	        .map(
+	          (doc) =>
+	            new ReadmeComEmbeddingSource(
+	              'readme.com',
+	              doc.body || '',
+	              `docs/${parentPage.slug}/${doc.slug}`,
+	              `docs/${parentPage.slug}`
+	            )
+	        )
+	    })
+	    .flat(1),
+	]
+}
+```
+
+When implementing the `EmbeddingSources` , the markdown (mdx) content can also be generated and prepared for OpenAI context, allowing to create knowledge from structured data.
+ie. recovering a [Statuspage.com](http://Statuspage.com) incident and formatting it as a markdown context file.
+
+```jsx
+async load() {
+		/**
+			Incident json example
+			{
+        		"name": "Nubank connection it's currently in maintainance",
+        		"status": "Investigating",
+				"components": [{ "name": "Nubank Retail" }],
+        		"updates": [{ 
+					"created_at": "2023-09-01T12:00:00.000Z", 
+					"body": "The team its investigating the issue with the connector of nubank" 
+				}]
+			}
+		*/
+		const { name, components, incident_updates, status } = this.incident
+    const contents = `# ${name}
+        There is an incident affecting ${components.length} components.
+        Which are:
+        ${components.map((component) => `- ${component.name}`).join('\n')}
+        The status is ${status}.
+        ${incident_updates
+          .map(
+            (update) => ` - ${update.created_at} ${update.body}`
+          )
+          .join('\n')}
+      `
+}
+```
+
+### Result
+
+After all integrations are created and configured, the vector storage is filled with the content from the setup integrations. Syncing on every deploy/build that generates the embeddings, but can easily be executed on a daily basis using other tools like [Upstash](https://upstash.com/docs/qstash/features/schedules).
+
+The documents are processed on pages, with checksums to avoid refreshing the data and regenerating embeddings on each run. Each page contains multiple sections that are stored in small pieces to get accurate content without too many tokens.
+
+<Image
+  alt={"Import result"}
+  src={`/static/images/supabase-openai-second-brain/table.png`}
+  width={530}
+  height={316}
+/>
+
+This can already be used through the built-in interface, to get responses for team's questions, 
+
+<Image
+  alt={"Reviewing template"}
+  src={`/static/images/supabase-openai-second-brain/web.png`}
+  width={530}
+  height={316}
+/>
+
+Since this project provides an endpoint for vector searches it can easily be connected to incoming Slack messages from team members or your users. 
+
+I've created a handler for *Slack* that you can connect using *[Slash Commands](https://api.slack.com/interactivity/slash-commands)* to the deployed project url `https://your-project.com/api/slack/bot`
+
+As an example, I connected this chatbot (a wise owl called “*Morai*”), that will help the team with their questions using slack commands like `/morai ask What is a connector?`
+
+<Image
+  alt={"Chatting with the bot"}
+  src={`/static/images/supabase-openai-second-brain/chat.png`}
+  width={630}
+  height={300}
+/>
+
+### Closing thoughts
+
+The motivation of this post was to expose the idea of creating a **Team's Second Brain** plugged into the tools that are used on a daily basis, and synchronised automatically to pull the most updated context. Using *Supabase Vector* to store embeddings makes it simple for any developer team or startup to create their own instance and connect their modules. 
+
+If you liked this project, **please star the [repository](https://github.com/Gabrielpanga/nextjs-openai-doc-search)** and if there is any integration that you would like to see feel **free to create an issue** or just do it. 
+
+I will actively maintain this project since we are already using it at my company!
